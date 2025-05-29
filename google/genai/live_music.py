@@ -18,7 +18,7 @@
 import contextlib
 import json
 import logging
-from typing import AsyncIterator
+from typing import AsyncIterator, List
 
 from . import _api_module
 from . import _common
@@ -52,7 +52,7 @@ class AsyncMusicSession:
 
   async def set_weighted_prompts(
       self,
-  	  prompts: list[types.WeightedPrompt]
+  	  prompts: List[types.WeightedPrompt]
   ) -> None:
     if self._api_client.vertexai:
       raise NotImplementedError('Live music generation is not supported in Vertex AI.')

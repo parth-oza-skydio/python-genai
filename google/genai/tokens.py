@@ -41,7 +41,7 @@ def _get_field_masks(setup: Dict[str, Any]) -> str:
 
 
 def _convert_bidi_setup_to_token_setup(
-    request_dict: dict[str, Any],
+    request_dict: Dict[str, Any],
     config: Optional[types.CreateAuthTokenConfigOrDict] = None,
 ) -> Dict[str, Any]:
   """Converts bidiGenerateContentSetup."""
@@ -209,7 +209,7 @@ class Tokens(_api_module.BaseModule):
     parameter_model = types.CreateAuthTokenParameters(
         config=config,
     )
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'
@@ -302,7 +302,7 @@ class AsyncTokens(_api_module.BaseModule):
         config=config,
     )
 
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'

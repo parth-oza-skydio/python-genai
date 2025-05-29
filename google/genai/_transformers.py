@@ -26,7 +26,7 @@ import sys
 import time
 import types as builtin_types
 import typing
-from typing import Any, GenericAlias, Optional, Sequence, Union  # type: ignore[attr-defined]
+from typing import Any, Dict, GenericAlias, List, Optional, Sequence, Union  # type: ignore[attr-defined]
 from ._mcp_utils import mcp_to_gemini_tool
 
 if typing.TYPE_CHECKING:
@@ -196,20 +196,20 @@ def t_models_url(
 
 def t_extract_models(
     api_client: _api_client.BaseApiClient,
-    response: dict[str, Any],
-) -> list[dict[str, Any]]:
+    response: Dict[str, Any],
+) -> List[Dict[str, Any]]:
   if not response:
     return []
 
-  models: Optional[list[dict[str, Any]]] = response.get('models')
+  models: Optional[List[Dict[str, Any]]] = response.get('models')
   if models is not None:
     return models
 
-  tuned_models: Optional[list[dict[str, Any]]] = response.get('tunedModels')
+  tuned_models: Optional[List[Dict[str, Any]]] = response.get('tunedModels')
   if tuned_models is not None:
     return tuned_models
 
-  publisher_models: Optional[list[dict[str, Any]]] = response.get(
+  publisher_models: Optional[List[Dict[str, Any]]] = response.get(
       'publisherModels'
   )
   if publisher_models is not None:
@@ -289,7 +289,7 @@ def t_function_responses(
         types.FunctionResponseOrDict,
         Sequence[types.FunctionResponseOrDict],
     ],
-) -> list[types.FunctionResponse]:
+) -> List[types.FunctionResponse]:
   if not function_responses:
     raise ValueError('function_responses are required.')
   if isinstance(function_responses, Sequence):
@@ -300,8 +300,8 @@ def t_function_responses(
 
 def t_blobs(
     api_client: _api_client.BaseApiClient,
-    blobs: Union[types.BlobImageUnionDict, list[types.BlobImageUnionDict]],
-) -> list[types.Blob]:
+    blobs: Union[types.BlobImageUnionDict, List[types.BlobImageUnionDict]],
+) -> List[types.Blob]:
   if isinstance(blobs, list):
     return [t_blob(api_client, blob) for blob in blobs]
   else:
@@ -380,9 +380,9 @@ def t_part(part: Optional[types.PartUnionDict]) -> types.Part:
 
 def t_parts(
     parts: Optional[
-        Union[list[types.PartUnionDict], types.PartUnionDict, list[types.Part]]
+        Union[List[types.PartUnionDict], types.PartUnionDict, List[types.Part]]
     ],
-) -> list[types.Part]:
+) -> List[types.Part]:
   #
   if parts is None or (isinstance(parts, list) and not parts):
     raise ValueError('content parts are required.')
@@ -395,7 +395,7 @@ def t_parts(
 def t_image_predictions(
     client: _api_client.BaseApiClient,
     predictions: Optional[Iterable[Mapping[str, Any]]],
-) -> Optional[list[types.GeneratedImage]]:
+) -> Optional[List[types.GeneratedImage]]:
   if not predictions:
     return None
   images = []
@@ -444,8 +444,8 @@ def t_content(
 
 def t_contents_for_embed(
     client: _api_client.BaseApiClient,
-    contents: Union[list[types.Content], list[types.ContentDict], ContentType],
-) -> Union[list[str], list[types.Content]]:
+    contents: Union[List[types.Content], List[types.ContentDict], ContentType],
+) -> Union[List[str], List[types.Content]]:
   if isinstance(contents, list):
     transformed_contents = [t_content(client, content) for content in contents]
   else:
@@ -473,7 +473,7 @@ def t_contents(
     contents: Optional[
         Union[types.ContentListUnion, types.ContentListUnionDict, types.Content]
     ],
-) -> list[types.Content]:
+) -> List[types.Content]:
   if contents is None or (isinstance(contents, list) and not contents):
     raise ValueError('contents are required.')
   if not isinstance(contents, list):
@@ -486,8 +486,8 @@ def t_contents(
   except ImportError:
     PIL_Image = None
 
-  result: list[types.Content] = []
-  accumulated_parts: list[types.Part] = []
+  result: List[types.Content] = []
+  accumulated_parts: List[types.Part] = []
 
   def _is_part(
       part: Union[types.PartUnionDict, Any],
@@ -512,12 +512,12 @@ def t_contents(
   def _is_user_part(part: types.Part) -> bool:
     return not part.function_call
 
-  def _are_user_parts(parts: list[types.Part]) -> bool:
+  def _are_user_parts(parts: List[types.Part]) -> bool:
     return all(_is_user_part(part) for part in parts)
 
   def _append_accumulated_parts_as_content(
-      result: list[types.Content],
-      accumulated_parts: list[types.Part],
+      result: List[types.Content],
+      accumulated_parts: List[types.Part],
   ) -> None:
     if not accumulated_parts:
       return
@@ -529,8 +529,8 @@ def t_contents(
     accumulated_parts[:] = []
 
   def _handle_current_part(
-      result: list[types.Content],
-      accumulated_parts: list[types.Part],
+      result: List[types.Content],
+      accumulated_parts: List[types.Part],
       current_part: types.PartUnionDict,
   ) -> None:
     current_part = t_part(current_part)
@@ -571,7 +571,7 @@ def t_contents(
   return result
 
 
-def handle_null_fields(schema: dict[str, Any]) -> None:
+def handle_null_fields(schema: Dict[str, Any]) -> None:
   """Process null fields in the schema so it is compatible with OpenAPI.
 
   The OpenAPI spec does not support 'type: 'null' in the schema. This function
@@ -646,9 +646,9 @@ def _raise_for_unsupported_mldev_properties(schema: Any, client: _api_client.Bas
 
 
 def process_schema(
-    schema: dict[str, Any],
+    schema: Dict[str, Any],
     client: _api_client.BaseApiClient,
-    defs: Optional[dict[str, Any]] = None,
+    defs: Optional[Dict[str, Any]] = None,
     *,
     order_properties: bool = True,
 ) -> None:
@@ -747,7 +747,7 @@ def process_schema(
   if (ref := schema.pop('$ref', None)) is not None:
     schema.update(defs[ref.split('defs/')[-1]])
 
-  def _recurse(sub_schema: dict[str, Any]) -> dict[str, Any]:
+  def _recurse(sub_schema: Dict[str, Any]) -> Dict[str, Any]:
     """Returns the processed `sub_schema`, resolving its '$ref' if any."""
     if (ref := sub_schema.pop('$ref', None)) is not None:
       sub_schema = defs[ref.split('defs/')[-1]]
@@ -816,8 +816,8 @@ def _process_enum(
 
 def _is_type_dict_str_any(
     origin: Union[types.SchemaUnionDict, Any],
-) -> TypeGuard[dict[str, Any]]:
-  """Verifies the schema is of type dict[str, Any] for mypy type checking."""
+) -> TypeGuard[Dict[str, Any]]:
+  """Verifies the schema is of type Dict[str, Any] for mypy type checking."""
   return isinstance(origin, dict) and all(
       isinstance(key, str) for key in origin
   )
@@ -843,7 +843,7 @@ def t_schema(
     return types.Schema.model_validate(schema)
 
   if (
-      # in Python 3.9 Generic alias list[int] counts as a type,
+      # in Python 3.9 Generic alias List[int] counts as a type,
       # and breaks issubclass because it's not a class.
       not isinstance(origin, GenericAlias)
       and isinstance(origin, type)
@@ -929,8 +929,8 @@ def t_tool(
 
 
 def t_tools(
-    client: _api_client.BaseApiClient, origin: list[Any]
-) -> list[types.Tool]:
+    client: _api_client.BaseApiClient, origin: List[Any]
+) -> List[types.Tool]:
   if not origin:
     return []
   function_tool = types.Tool(function_declarations=[])
@@ -1011,10 +1011,10 @@ LRO_POLLING_MULTIPLIER = 1.5
 
 
 def t_resolve_operation(
-    api_client: _api_client.BaseApiClient, struct: dict[str, Any]
+    api_client: _api_client.BaseApiClient, struct: Dict[str, Any]
 ) -> Any:
   if (name := struct.get('name')) and '/operations/' in name:
-    operation: dict[str, Any] = struct
+    operation: Dict[str, Any] = struct
     total_seconds = 0.0
     delay_seconds = LRO_POLLING_INITIAL_DELAY_SECONDS
     while operation.get('done') != True:
@@ -1116,7 +1116,7 @@ def t_content_strict(content: types.ContentOrDict) -> types.Content:
 
 def t_contents_strict(
     contents: Union[Sequence[types.ContentOrDict], types.ContentOrDict],
-) -> list[types.Content]:
+) -> List[types.Content]:
   if isinstance(contents, Sequence):
     return [t_content_strict(content) for content in contents]
   else:

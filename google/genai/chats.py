@@ -15,7 +15,7 @@
 
 from collections.abc import Iterator
 import sys
-from typing import AsyncIterator, Awaitable, Optional, Union, get_args
+from typing import AsyncIterator, Awaitable, List, Optional, Union, get_args
 
 from . import _transformers as t
 from . import types
@@ -40,7 +40,7 @@ def _validate_content(content: Content) -> bool:
   return True
 
 
-def _validate_contents(contents: list[Content]) -> bool:
+def _validate_contents(contents: List[Content]) -> bool:
   if not contents:
     return False
   for content in contents:
@@ -58,8 +58,8 @@ def _validate_response(response: GenerateContentResponse) -> bool:
 
 
 def _extract_curated_history(
-    comprehensive_history: list[Content],
-) -> list[Content]:
+    comprehensive_history: List[Content],
+) -> List[Content]:
   """Extracts the curated (valid) history from a comprehensive history.
 
   The comprehensive history contains all turns (user input and model responses),
@@ -117,7 +117,7 @@ class _BaseChat:
       *,
       model: str,
       config: Optional[GenerateContentConfigOrDict] = None,
-      history: list[ContentOrDict],
+      history: List[ContentOrDict],
   ):
     self._model = model
     self._config = config
@@ -138,8 +138,8 @@ class _BaseChat:
   def record_history(
       self,
       user_input: Content,
-      model_output: list[Content],
-      automatic_function_calling_history: list[Content],
+      model_output: List[Content],
+      automatic_function_calling_history: List[Content],
       is_valid: bool,
   ) -> None:
     """Records the chat history.
@@ -175,7 +175,7 @@ class _BaseChat:
       self._curated_history.extend(input_contents)
       self._curated_history.extend(output_contents)
 
-  def get_history(self, curated: bool = False) -> list[Content]:
+  def get_history(self, curated: bool = False) -> List[Content]:
     """Returns the chat history.
 
     Args:
@@ -193,7 +193,7 @@ class _BaseChat:
 
 
 def _is_part_type(
-    contents: Union[list[PartUnionDict], PartUnionDict],
+    contents: Union[List[PartUnionDict], PartUnionDict],
 ) -> TypeGuard[t.ContentType]:
   if isinstance(contents, list):
     return all(_is_part_type(part) for part in contents)
@@ -218,7 +218,7 @@ class Chat(_BaseChat):
       modules: Models,
       model: str,
       config: Optional[GenerateContentConfigOrDict] = None,
-      history: list[ContentOrDict],
+      history: List[ContentOrDict],
   ):
     self._modules = modules
     super().__init__(
@@ -229,7 +229,7 @@ class Chat(_BaseChat):
 
   def send_message(
       self,
-      message: Union[list[PartUnionDict], PartUnionDict],
+      message: Union[List[PartUnionDict], PartUnionDict],
       config: Optional[GenerateContentConfigOrDict] = None,
   ) -> GenerateContentResponse:
     """Sends the conversation history with the additional message and returns the model's response.
@@ -281,7 +281,7 @@ class Chat(_BaseChat):
 
   def send_message_stream(
       self,
-      message: Union[list[PartUnionDict], PartUnionDict],
+      message: Union[List[PartUnionDict], PartUnionDict],
       config: Optional[GenerateContentConfigOrDict] = None,
   ) -> Iterator[GenerateContentResponse]:
     """Sends the conversation history with the additional message and yields the model's response in chunks.
@@ -352,7 +352,7 @@ class Chats:
       *,
       model: str,
       config: Optional[GenerateContentConfigOrDict] = None,
-      history: Optional[list[ContentOrDict]] = None,
+      history: Optional[List[ContentOrDict]] = None,
   ) -> Chat:
     """Creates a new chat session.
 
@@ -381,7 +381,7 @@ class AsyncChat(_BaseChat):
       modules: AsyncModels,
       model: str,
       config: Optional[GenerateContentConfigOrDict] = None,
-      history: list[ContentOrDict],
+      history: List[ContentOrDict],
   ):
     self._modules = modules
     super().__init__(
@@ -392,7 +392,7 @@ class AsyncChat(_BaseChat):
 
   async def send_message(
       self,
-      message: Union[list[PartUnionDict], PartUnionDict],
+      message: Union[List[PartUnionDict], PartUnionDict],
       config: Optional[GenerateContentConfigOrDict] = None,
   ) -> GenerateContentResponse:
     """Sends the conversation history with the additional message and returns model's response.
@@ -443,7 +443,7 @@ class AsyncChat(_BaseChat):
 
   async def send_message_stream(
       self,
-      message: Union[list[PartUnionDict], PartUnionDict],
+      message: Union[List[PartUnionDict], PartUnionDict],
       config: Optional[GenerateContentConfigOrDict] = None,
   ) -> AsyncIterator[GenerateContentResponse]:
     """Sends the conversation history with the additional message and yields the model's response in chunks.
@@ -512,7 +512,7 @@ class AsyncChats:
       *,
       model: str,
       config: Optional[GenerateContentConfigOrDict] = None,
-      history: Optional[list[ContentOrDict]] = None,
+      history: Optional[List[ContentOrDict]] = None,
   ) -> AsyncChat:
     """Creates a new chat session.
 

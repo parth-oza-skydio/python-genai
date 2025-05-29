@@ -20,7 +20,7 @@ import datetime
 import enum
 import functools
 import typing
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 import uuid
 import warnings
 
@@ -31,7 +31,7 @@ from . import _api_client
 from . import errors
 
 
-def set_value_by_path(data: Optional[dict[Any, Any]], keys: list[str], value: Any) -> None:
+def set_value_by_path(data: Optional[Dict[Any, Any]], keys: List[str], value: Any) -> None:
   """Examples:
 
   set_value_by_path({}, ['a', 'b'], v)
@@ -96,7 +96,7 @@ def set_value_by_path(data: Optional[dict[Any, Any]], keys: list[str], value: An
       data[keys[-1]] = value
 
 
-def get_value_by_path(data: Any, keys: list[str]) -> Any:
+def get_value_by_path(data: Any, keys: List[str]) -> Any:
   """Examples:
 
   get_value_by_path({'a': {'b': v}}, ['a', 'b'])
@@ -155,7 +155,7 @@ def convert_to_dict(obj: object) -> Any:
 
 
 def _remove_extra_fields(
-    model: Any, response: dict[str, object]
+    model: Any, response: Dict[str, object]
 ) -> None:
   """Removes extra fields from the response that are not in the model.
 
@@ -213,7 +213,7 @@ class BaseModel(pydantic.BaseModel):
 
   @classmethod
   def _from_response(
-      cls: typing.Type[T], *, response: dict[str, object], kwargs: dict[str, object]
+      cls: typing.Type[T], *, response: Dict[str, object], kwargs: Dict[str, object]
   ) -> T:
     # To maintain forward compatibility, we need to remove extra fields from
     # the response.
@@ -222,7 +222,7 @@ class BaseModel(pydantic.BaseModel):
     validated_response = cls.model_validate(response)
     return validated_response
 
-  def to_json_dict(self) -> dict[str, object]:
+  def to_json_dict(self) -> Dict[str, object]:
     return self.model_dump(exclude_none=True, mode='json')
 
 
@@ -260,7 +260,7 @@ def timestamped_unique_name() -> str:
   return f'{timestamp}_{unique_id}'
 
 
-def encode_unserializable_types(data: dict[str, object]) -> dict[str, object]:
+def encode_unserializable_types(data: Dict[str, object]) -> Dict[str, object]:
   """Converts unserializable types in dict to json.dumps() compatible types.
 
   This function is called in models.py after calling convert_to_dict(). The
@@ -274,7 +274,7 @@ def encode_unserializable_types(data: dict[str, object]) -> dict[str, object]:
     A dictionary with json.dumps() incompatible type (e.g. bytes datetime)
     to compatible type (e.g. base64 encoded string, isoformat date string).
   """
-  processed_data: dict[str, object] = {}
+  processed_data: Dict[str, object] = {}
   if not isinstance(data, dict):
     return data
   for key, value in data.items():

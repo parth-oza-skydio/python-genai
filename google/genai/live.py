@@ -21,7 +21,7 @@ import contextlib
 import json
 import logging
 import typing
-from typing import Any, AsyncIterator, Dict, Optional, Sequence, Union, get_args
+from typing import Any, AsyncIterator, Dict, List, Optional, Sequence, Union, get_args
 import warnings
 
 import google.auth
@@ -147,7 +147,7 @@ class AsyncSession:
           Union[
               types.Content,
               types.ContentDict,
-              list[Union[types.Content, types.ContentDict]],
+              List[Union[types.Content, types.ContentDict]],
           ]
       ] = None,
       turn_complete: bool = True,
@@ -288,7 +288,7 @@ class AsyncSession:
           print(f'{msg.text}')
     ```
     """
-    kwargs: dict[str, Any] = {}
+    kwargs: Dict[str, Any] = {}
     if media is not None:
       kwargs['media'] = media
     if audio is not None:
@@ -643,8 +643,8 @@ class AsyncSession:
     elif isinstance(formatted_input, Sequence) and any(
         isinstance(c, str) for c in formatted_input
     ):
-      to_object: dict[str, Any] = {}
-      content_input_parts: list[types.PartUnion] = []
+      to_object: Dict[str, Any] = {}
+      content_input_parts: List[types.PartUnion] = []
       for item in formatted_input:
         if isinstance(item, get_args(types.PartUnion)):
           content_input_parts.append(item)
@@ -659,7 +659,7 @@ class AsyncSession:
             for item in t.t_contents(self._api_client, content_input_parts)
         ]
 
-      content_dict_list: list[types.ContentDict] = []
+      content_dict_list: List[types.ContentDict] = []
       for item in contents:
         try:
           content_input = types.Content(**item)
@@ -764,7 +764,7 @@ class AsyncSession:
               client_message['realtime_input']['media_chunks'][0]['data'], bytes
           )
       ):
-        formatted_media_chunks: list[types.BlobDict] = []
+        formatted_media_chunks: List[types.BlobDict] = []
         for item in client_message['realtime_input']['media_chunks']:
           if isinstance(item, dict):
             try:
@@ -837,7 +837,7 @@ class AsyncSession:
     ):
       if not (self._api_client.vertexai) and not (formatted_input[0].id):
         raise ValueError(_FUNCTION_RESPONSE_REQUIRES_ID)
-      function_response_list: list[types.FunctionResponseDict] = []
+      function_response_list: List[types.FunctionResponseDict] = []
       for item in formatted_input:
         function_response_dict = item.model_dump(exclude_none=True, mode='json')
         function_response_typeddict = types.FunctionResponseDict(

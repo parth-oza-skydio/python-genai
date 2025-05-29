@@ -17,7 +17,7 @@
 
 from importlib.metadata import PackageNotFoundError, version
 import typing
-from typing import Any
+from typing import Any, Dict, List
 
 from . import types
 
@@ -50,7 +50,7 @@ def mcp_to_gemini_tool(tool: McpTool) -> types.Tool:
   )
 
 
-def mcp_to_gemini_tools(tools: list[McpTool]) -> list[types.Tool]:
+def mcp_to_gemini_tools(tools: List[McpTool]) -> List[types.Tool]:
   """Translates a list of MCP tools to a list of Google GenAI tools."""
   return [mcp_to_gemini_tool(tool) for tool in tools]
 
@@ -75,7 +75,7 @@ def has_mcp_session_usage(tools: types.ToolListUnion) -> bool:
   return False
 
 
-def set_mcp_usage_header(headers: dict[str, str]) -> None:
+def set_mcp_usage_header(headers: Dict[str, str]) -> None:
   """Sets the MCP version label in the Google API client header."""
   if McpClientSession is None:
     return
@@ -89,7 +89,7 @@ def set_mcp_usage_header(headers: dict[str, str]) -> None:
   ).lstrip()
 
 
-def _filter_to_supported_schema(schema: dict[str, Any]) -> dict[str, Any]:
+def _filter_to_supported_schema(schema: Dict[str, Any]) -> Dict[str, Any]:
   """Filters the schema to only include fields that are supported by JSONSchema."""
   supported_fields: set[str] = set(types.JSONSchema.model_fields.keys())
   schema_field_names: tuple[str] = ("items",)  # 'additional_properties' to come

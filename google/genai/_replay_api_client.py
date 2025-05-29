@@ -24,7 +24,7 @@ import io
 import json
 import os
 import re
-from typing import Any, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
 import google.auth
 from requests.exceptions import HTTPError
@@ -97,7 +97,7 @@ def _redact_language_label(language_label: str) -> str:
   return re.sub(r'gl-python/', '{LANGUAGE_LABEL}/', language_label)
 
 
-def _redact_request_headers(headers: dict[str, str]) -> dict[str, str]:
+def _redact_request_headers(headers: Dict[str, str]) -> Dict[str, str]:
   """Redacts headers that should not be recorded."""
   redacted_headers = {}
   for header_name, header_value in headers.items():
@@ -160,7 +160,7 @@ def _redact_project_location_path(path: str) -> str:
     return path
 
 
-def _redact_request_body(body: dict[str, object]) -> None:
+def _redact_request_body(body: Dict[str, object]) -> None:
   """Redacts fields in the request body in place."""
   for key, value in body.items():
     if isinstance(value, str):
@@ -205,18 +205,18 @@ class ReplayRequest(BaseModel):
 
   method: str
   url: str
-  headers: dict[str, str]
-  body_segments: list[dict[str, object]]
+  headers: Dict[str, str]
+  body_segments: List[Dict[str, object]]
 
 
 class ReplayResponse(BaseModel):
   """Represents a single response in a replay."""
 
   status_code: int = 200
-  headers: dict[str, str]
-  body_segments: list[dict[str, object]]
-  byte_segments: Optional[list[bytes]] = None
-  sdk_response_segments: list[dict[str, object]]
+  headers: Dict[str, str]
+  body_segments: List[Dict[str, object]]
+  byte_segments: Optional[List[bytes]] = None
+  sdk_response_segments: List[Dict[str, object]]
 
   def model_post_init(self, __context: Any) -> None:
     # Remove headers that are not deterministic so the replay files don't change
@@ -236,7 +236,7 @@ class ReplayFile(BaseModel):
   """Represents a recorded session."""
 
   replay_id: str
-  interactions: list[ReplayInteraction]
+  interactions: List[ReplayInteraction]
 
 
 class ReplayApiClient(BaseApiClient):

@@ -18,7 +18,7 @@
 # pylint: disable=protected-access
 
 import copy
-from typing import Any, AsyncIterator,Awaitable, Callable, Generic, Iterator, Literal, TypeVar
+from typing import Any, AsyncIterator, Awaitable, Callable, Dict, Generic, Iterator, List, Literal, TypeVar
 
 T = TypeVar('T')
 
@@ -64,7 +64,7 @@ class _BasePager(Generic[T]):
     self._init_page(name, request, response, config)
 
   @property
-  def page(self) -> list[T]:
+  def page(self) -> List[T]:
     """Returns a subset of the entire list of items. 
 
     For the number of items returned, see `pageSize()`.
@@ -111,7 +111,7 @@ class _BasePager(Generic[T]):
     return self._page_size
 
   @property
-  def config(self) -> dict[str, Any]:
+  def config(self) -> Dict[str, Any]:
     """Returns the configuration when making the API request for the next page.
 
     A configuration is a set of optional parameters and arguments that can be
@@ -169,7 +169,7 @@ class Pager(_BasePager[T]):
     self._idx = 0
     return self
 
-  def next_page(self) -> list[T]:
+  def next_page(self) -> List[T]:
     """Fetches the next page of items. This makes a new API request.
 
     Usage:
@@ -221,7 +221,7 @@ class AsyncPager(_BasePager[T]):
     self._idx += 1
     return item
 
-  async def next_page(self) -> list[T]:
+  async def next_page(self) -> List[T]:
     """Fetches the next page of items asynchronously.
 
     This makes a new API request.

@@ -19,7 +19,7 @@ import inspect
 import logging
 import sys
 import typing
-from typing import Any, Callable, Dict, Optional, Union, get_args, get_origin
+from typing import Any, Callable, Dict, List, Optional, Union, get_args, get_origin
 
 import pydantic
 
@@ -95,12 +95,12 @@ def format_destination(
 def get_function_map(
     config: Optional[types.GenerateContentConfigOrDict] = None,
     mcp_to_genai_tool_adapters: Optional[
-        dict[str, McpToGenAiToolAdapter]
+        Dict[str, McpToGenAiToolAdapter]
     ] = None,
     is_caller_method_async: bool = False,
-) -> dict[str, Union[Callable[..., Any], McpToGenAiToolAdapter]]:
+) -> Dict[str, Union[Callable[..., Any], McpToGenAiToolAdapter]]:
   """Returns a function map from the config."""
-  function_map: dict[str, Union[Callable[..., Any], McpToGenAiToolAdapter]] = {}
+  function_map: Dict[str, Union[Callable[..., Any], McpToGenAiToolAdapter]] = {}
   if not config:
     return function_map
   config_model = _create_generate_content_config_model(config)
@@ -129,8 +129,8 @@ def get_function_map(
 
 
 def convert_number_values_for_dict_function_call_args(
-    args: dict[str, Any],
-) -> dict[str, Any]:
+    args: Dict[str, Any],
+) -> Dict[str, Any]:
   """Converts float values in dict with no decimal to integers."""
   return {
       key: convert_number_values_for_function_call_args(value)
@@ -139,8 +139,8 @@ def convert_number_values_for_dict_function_call_args(
 
 
 def convert_number_values_for_function_call_args(
-    args: Union[dict[str, object], list[object], object],
-) -> Union[dict[str, object], list[object], object]:
+    args: Union[Dict[str, object], List[object], object],
+) -> Union[Dict[str, object], List[object], object]:
   """Converts float values with no decimal to integers."""
   if isinstance(args, float) and args.is_integer():
     return int(args)
@@ -231,8 +231,8 @@ def convert_if_exist_pydantic_model(
 
 
 def convert_argument_from_function(
-    args: dict[str, Any], function: Callable[..., Any]
-) -> dict[str, Any]:
+    args: Dict[str, Any], function: Callable[..., Any]
+) -> Dict[str, Any]:
   signature = inspect.signature(function)
   func_name = function.__name__
   converted_args = {}
@@ -277,8 +277,8 @@ async def invoke_function_from_dict_args_async(
 
 def get_function_response_parts(
     response: types.GenerateContentResponse,
-    function_map: dict[str, Union[Callable[..., Any], McpToGenAiToolAdapter]],
-) -> list[types.Part]:
+    function_map: Dict[str, Union[Callable[..., Any], McpToGenAiToolAdapter]],
+) -> List[types.Part]:
   """Returns the function response parts from the response."""
   func_response_parts = []
   if (
@@ -295,7 +295,7 @@ def get_function_response_parts(
         args = convert_number_values_for_dict_function_call_args(
             part.function_call.args
         )
-        func_response: dict[str, Any]
+        func_response: Dict[str, Any]
         try:
           if not isinstance(func, McpToGenAiToolAdapter):
             func_response = {
@@ -312,8 +312,8 @@ def get_function_response_parts(
 
 async def get_function_response_parts_async(
     response: types.GenerateContentResponse,
-    function_map: dict[str, Union[Callable[..., Any], McpToGenAiToolAdapter]],
-) -> list[types.Part]:
+    function_map: Dict[str, Union[Callable[..., Any], McpToGenAiToolAdapter]],
+) -> List[types.Part]:
   """Returns the function response parts from the response."""
   func_response_parts = []
   if (
@@ -330,7 +330,7 @@ async def get_function_response_parts_async(
         args = convert_number_values_for_dict_function_call_args(
             part.function_call.args
         )
-        func_response: dict[str, Any]
+        func_response: Dict[str, Any]
         try:
           if isinstance(func, McpToGenAiToolAdapter):
             mcp_tool_response = await func.call_tool(
@@ -468,13 +468,13 @@ async def parse_config_for_mcp_sessions(
     config: Optional[types.GenerateContentConfigOrDict] = None,
 ) -> tuple[
     Optional[types.GenerateContentConfig],
-    dict[str, McpToGenAiToolAdapter],
+    Dict[str, McpToGenAiToolAdapter],
 ]:
   """Returns a parsed config with MCP sessions converted to GenAI tools.
 
   Also returns a map of MCP tools to GenAI tool adapters to be used for AFC.
   """
-  mcp_to_genai_tool_adapters: dict[str, McpToGenAiToolAdapter] = {}
+  mcp_to_genai_tool_adapters: Dict[str, McpToGenAiToolAdapter] = {}
   parsed_config = parse_config_for_mcp_usage(config)
   if not parsed_config:
     return None, mcp_to_genai_tool_adapters

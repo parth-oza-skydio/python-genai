@@ -15,7 +15,7 @@
 
 """Error classes for the GenAI SDK."""
 
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Dict, Optional, TYPE_CHECKING, Union
 import httpx
 import json
 
@@ -61,7 +61,7 @@ class APIError(Exception):
         'code', response_json.get('error', {}).get('code', None)
     )
 
-  def _to_replay_record(self) -> dict[str, Any]:
+  def _to_replay_record(self) -> Dict[str, Any]:
     """Returns a dictionary representation of the error for replay recording.
 
     details is not included since it may expose internal information in the

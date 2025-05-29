@@ -13,12 +13,12 @@
 # limitations under the License.
 #
 
-import typing
+from typing import List, TYPE_CHECKING, cast
 
 from ._mcp_utils import mcp_to_gemini_tools
 from .types import FunctionCall, Tool
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
   from mcp import types as mcp_types
   from mcp import ClientSession
 
@@ -41,7 +41,7 @@ class McpToGenAiToolAdapter:
     name = function_call.name if function_call.name else ""
     arguments = dict(function_call.args) if function_call.args else {}
 
-    return typing.cast(
+    return cast(
         "mcp_types.CallToolResult",
         await self._mcp_session.call_tool(
             name=name,
@@ -50,6 +50,6 @@ class McpToGenAiToolAdapter:
     )
 
   @property
-  def tools(self) -> list[Tool]:
+  def tools(self) -> List[Tool]:
     """Returns a list of Google GenAI tools."""
     return mcp_to_gemini_tools(self._list_tools_result.tools)

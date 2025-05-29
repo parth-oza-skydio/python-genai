@@ -20,7 +20,7 @@ import logging
 import mimetypes
 import os
 import pathlib
-from typing import Any, Optional, Union
+from typing import Any, Dict, Optional, Union
 from urllib.parse import urlencode
 from . import _api_module
 from . import _common
@@ -36,10 +36,10 @@ logger = logging.getLogger('google_genai.files')
 
 def _ListFilesConfig_to_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
 
   if getv(from_object, ['page_size']) is not None:
     setv(
@@ -58,10 +58,10 @@ def _ListFilesConfig_to_mldev(
 
 def _ListFilesParameters_to_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['config']) is not None:
     setv(
         to_object,
@@ -76,10 +76,10 @@ def _ListFilesParameters_to_mldev(
 
 def _FileStatus_to_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['details']) is not None:
     setv(to_object, ['details'], getv(from_object, ['details']))
 
@@ -94,10 +94,10 @@ def _FileStatus_to_mldev(
 
 def _File_to_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['name']) is not None:
     setv(to_object, ['name'], getv(from_object, ['name']))
 
@@ -151,10 +151,10 @@ def _File_to_mldev(
 
 def _CreateFileParameters_to_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['file']) is not None:
     setv(
         to_object,
@@ -170,10 +170,10 @@ def _CreateFileParameters_to_mldev(
 
 def _GetFileParameters_to_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['name']) is not None:
     setv(
         to_object,
@@ -189,10 +189,10 @@ def _GetFileParameters_to_mldev(
 
 def _DeleteFileParameters_to_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['name']) is not None:
     setv(
         to_object,
@@ -208,10 +208,10 @@ def _DeleteFileParameters_to_mldev(
 
 def _FileStatus_from_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['details']) is not None:
     setv(to_object, ['details'], getv(from_object, ['details']))
 
@@ -226,10 +226,10 @@ def _FileStatus_from_mldev(
 
 def _File_from_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['name']) is not None:
     setv(to_object, ['name'], getv(from_object, ['name']))
 
@@ -283,10 +283,10 @@ def _File_from_mldev(
 
 def _ListFilesResponse_from_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['nextPageToken']) is not None:
     setv(to_object, ['next_page_token'], getv(from_object, ['nextPageToken']))
 
@@ -305,10 +305,10 @@ def _ListFilesResponse_from_mldev(
 
 def _CreateFileResponse_from_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
   if getv(from_object, ['httpHeaders']) is not None:
     setv(to_object, ['http_headers'], getv(from_object, ['httpHeaders']))
 
@@ -317,10 +317,10 @@ def _CreateFileResponse_from_mldev(
 
 def _DeleteFileResponse_from_mldev(
     api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-  to_object: dict[str, Any] = {}
+    from_object: Union[Dict[str, Any], object],
+    parent_object: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+  to_object: Dict[str, Any] = {}
 
   return to_object
 
@@ -351,7 +351,7 @@ class Files(_api_module.BaseModule):
         config=config,
     )
 
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'
@@ -408,7 +408,7 @@ class Files(_api_module.BaseModule):
         config=config,
     )
 
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'
@@ -479,7 +479,7 @@ class Files(_api_module.BaseModule):
         config=config,
     )
 
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'
@@ -547,7 +547,7 @@ class Files(_api_module.BaseModule):
         config=config,
     )
 
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'
@@ -823,7 +823,7 @@ class AsyncFiles(_api_module.BaseModule):
         config=config,
     )
 
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'
@@ -880,7 +880,7 @@ class AsyncFiles(_api_module.BaseModule):
         config=config,
     )
 
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'
@@ -951,7 +951,7 @@ class AsyncFiles(_api_module.BaseModule):
         config=config,
     )
 
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'
@@ -1019,7 +1019,7 @@ class AsyncFiles(_api_module.BaseModule):
         config=config,
     )
 
-    request_url_dict: Optional[dict[str, str]]
+    request_url_dict: Optional[Dict[str, str]]
     if self._api_client.vertexai:
       raise ValueError(
           'This method is only supported in the Gemini Developer client.'

@@ -34,7 +34,7 @@ import ssl
 import sys
 import threading
 import time
-from typing import Any, AsyncIterator, Optional, Tuple, Union
+from typing import Any, AsyncIterator, Dict, Optional, Tuple, Union
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
 
@@ -63,7 +63,7 @@ MAX_RETRY_COUNT = 3
 INITIAL_RETRY_DELAY = 1  # second
 DELAY_MULTIPLIER = 2
 
-def _append_library_version_headers(headers: dict[str, str]) -> None:
+def _append_library_version_headers(headers: Dict[str, str]) -> None:
   """Appends the telemetry header to the headers dict."""
   library_label = f'google-genai-sdk/{version.__version__}'
   language_label = 'gl-python/' + sys.version.split()[0]
@@ -113,7 +113,7 @@ def _patch_http_options(
 
 
 def _populate_server_timeout_header(
-    headers: dict[str, str], timeout_in_seconds: Optional[Union[float, int]]
+    headers: Dict[str, str], timeout_in_seconds: Optional[Union[float, int]]
 ) -> None:
   """Populates the server timeout header in the headers dict."""
   if timeout_in_seconds and 'X-Server-Timeout' not in headers:
@@ -168,17 +168,17 @@ def _get_timeout_in_seconds(
 
 @dataclass
 class HttpRequest:
-  headers: dict[str, str]
+  headers: Dict[str, str]
   url: str
   method: str
-  data: Union[dict[str, object], bytes]
+  data: Union[Dict[str, object], bytes]
   timeout: Optional[float] = None
 
 
 # TODO(b/394358912): Update this class to use a SDKResponse class that can be
 # generated and used for all languages.
 class BaseResponse(_common.BaseModel):
-  http_headers: Optional[dict[str, str]] = Field(
+  http_headers: Optional[Dict[str, str]] = Field(
       default=None, description='The http headers of the response.'
   )
 
@@ -191,7 +191,7 @@ class HttpResponse:
 
   def __init__(
       self,
-      headers: Union[dict[str, str], httpx.Headers],
+      headers: Union[Dict[str, str], httpx.Headers],
       response_stream: Union[Any, str] = None,
       byte_stream: Union[Any, bytes] = None,
   ):
@@ -271,7 +271,7 @@ class HttpResponse:
           'Byte segments are not supported for streaming responses.'
       )
 
-  def _copy_to_dict(self, response_payload: dict[str, object]) -> None:
+  def _copy_to_dict(self, response_payload: Dict[str, object]) -> None:
     # Cannot pickle 'generator' object.
     delattr(self, 'segment_iterator')
     for attribute in dir(self):
@@ -461,7 +461,7 @@ class BaseApiClient:
 
   @staticmethod
   def _ensure_ssl_ctx(options: HttpOptions) -> (
-      Tuple[dict[str, Any], dict[str, Any]]):
+      Tuple[Dict[str, Any], Dict[str, Any]]):
     """Ensures the SSL context is present in the client args.
 
     Creates a default SSL context if one is not provided.
@@ -492,9 +492,9 @@ class BaseApiClient:
       )
 
     def _maybe_set(
-        args: Optional[dict[str, Any]],
+        args: Optional[Dict[str, Any]],
         ctx: ssl.SSLContext,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
       """Sets the SSL context in the client args if not set.
 
       Does not override the SSL context if it is already set.
@@ -571,7 +571,7 @@ class BaseApiClient:
       self,
       http_method: str,
       path: str,
-      request_dict: dict[str, object],
+      request_dict: Dict[str, object],
       http_options: Optional[HttpOptionsOrDict] = None,
   ) -> HttpRequest:
     # Remove all special dict keys such as _url and _query.
@@ -735,7 +735,7 @@ class BaseApiClient:
           response.headers, response if stream else [response.text]
       )
 
-  def get_read_only_http_options(self) -> dict[str, Any]:
+  def get_read_only_http_options(self) -> Dict[str, Any]:
     if isinstance(self._http_options, BaseModel):
       copied = self._http_options.model_dump()
     else:
@@ -746,7 +746,7 @@ class BaseApiClient:
       self,
       http_method: str,
       path: str,
-      request_dict: dict[str, object],
+      request_dict: Dict[str, object],
       http_options: Optional[HttpOptionsOrDict] = None,
   ) -> Union[BaseResponse, Any]:
     http_request = self._build_request(
@@ -764,7 +764,7 @@ class BaseApiClient:
       self,
       http_method: str,
       path: str,
-      request_dict: dict[str, object],
+      request_dict: Dict[str, object],
       http_options: Optional[HttpOptionsOrDict] = None,
   ) -> Generator[Any, None, None]:
     http_request = self._build_request(
@@ -779,7 +779,7 @@ class BaseApiClient:
       self,
       http_method: str,
       path: str,
-      request_dict: dict[str, object],
+      request_dict: Dict[str, object],
       http_options: Optional[HttpOptionsOrDict] = None,
   ) -> Union[BaseResponse, Any]:
     http_request = self._build_request(
@@ -796,7 +796,7 @@ class BaseApiClient:
       self,
       http_method: str,
       path: str,
-      request_dict: dict[str, object],
+      request_dict: Dict[str, object],
       http_options: Optional[HttpOptionsOrDict] = None,
   ) -> Any:
     http_request = self._build_request(

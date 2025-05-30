@@ -13,9 +13,9 @@
 # limitations under the License.
 #
 
-from collections.abc import Iterator
+
 import sys
-from typing import AsyncIterator, Awaitable, List, Optional, Union, get_args
+from typing import AsyncIterator, Awaitable, Iterator, List, Optional, Union, get_args
 
 from . import _transformers as t
 from . import types

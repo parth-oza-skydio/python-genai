@@ -20,7 +20,7 @@ The BaseApiClient is intended to be a private module and is subject to change.
 """
 
 import asyncio
-from collections.abc import Awaitable, Generator
+from collections.abc import Awaitable
 import copy
 from dataclasses import dataclass
 import datetime
@@ -34,7 +34,7 @@ import ssl
 import sys
 import threading
 import time
-from typing import Any, AsyncIterator, Dict, Optional, Tuple, Union
+from typing import Any, AsyncIterator, Dict, Optional, Tuple, Union, Generator
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
 

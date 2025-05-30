@@ -16,7 +16,7 @@
 """Transformers for Google GenAI SDK."""
 
 import base64
-from collections.abc import Iterable, Mapping
+
 from enum import Enum, EnumMeta
 import inspect
 import io
@@ -26,7 +26,13 @@ import sys
 import time
 import types as builtin_types
 import typing
-from typing import Any, Dict, GenericAlias, List, Optional, Sequence, Union  # type: ignore[attr-defined]
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Union
+
+if sys.version_info >= (3, 9):
+    from typing import GenericAlias
+else:
+    class _DummyGenericAlias: pass
+    GenericAlias = _DummyGenericAlias
 from ._mcp_utils import mcp_to_gemini_tool
 
 if typing.TYPE_CHECKING:
@@ -44,7 +50,10 @@ if sys.version_info >= (3, 10):
   _UNION_TYPES = (typing.Union, builtin_types.UnionType)
   from typing import TypeGuard
 else:
-  VersionedUnionType = typing._UnionGenericAlias  # type: ignore[attr-defined]
+  if sys.version_info >= (3,10):
+    from types import UnionType as VersionedUnionType
+  else:
+    VersionedUnionType = typing.Union # Fallback for older versions
   _UNION_TYPES = (typing.Union,)
   from typing_extensions import TypeGuard
 

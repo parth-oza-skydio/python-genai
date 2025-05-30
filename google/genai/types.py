@@ -23,7 +23,7 @@ import logging
 import sys
 import types as builtin_types
 import typing
-from typing import Any, Callable, Dict, List, Literal, Optional, Sequence, Union, _UnionGenericAlias  # type: ignore
+from typing import Any, Callable, Dict, List, Literal, Optional, Sequence, Union  # type: ignore
 import pydantic
 from pydantic import Field
 from typing_extensions import TypedDict
@@ -31,11 +31,11 @@ from . import _common
 
 if sys.version_info >= (3, 10):
   # Supports both Union[t1, t2] and t1 | t2
-  VersionedUnionType = Union[builtin_types.UnionType, _UnionGenericAlias]
+
   _UNION_TYPES = (typing.Union, builtin_types.UnionType)
 else:
   # Supports only Union[t1, t2]
-  VersionedUnionType = _UnionGenericAlias
+
   _UNION_TYPES = (typing.Union,)
 
 _is_pillow_image_imported = False
@@ -2760,9 +2760,14 @@ else:
 ToolListUnion = List[ToolUnion]
 ToolListUnionDict = List[ToolUnionDict]
 
-SchemaUnion = Union[
-    Dict[Any, Any], type, Schema, builtin_types.GenericAlias, VersionedUnionType  # type: ignore[valid-type]
-]
+if sys.version_info >= (3, 9):
+    SchemaUnion = Union[
+        Dict[Any, Any], type, Schema, builtin_types.GenericAlias, Union  # type: ignore[valid-type]
+    ]
+else:  # Python 3.8
+    SchemaUnion = Union[
+        Dict[Any, Any], type, Schema  # type: ignore[valid-type]
+    ]
 SchemaUnionDict = Union[SchemaUnion, SchemaDict]
 
 

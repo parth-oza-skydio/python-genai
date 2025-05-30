@@ -19,7 +19,7 @@ import inspect
 import logging
 import sys
 import typing
-from typing import Any, Callable, Dict, List, Optional, Union, get_args, get_origin
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union, get_args, get_origin
 
 import pydantic
 
@@ -33,7 +33,7 @@ from ._adapters import McpToGenAiToolAdapter
 if sys.version_info >= (3, 10):
   from types import UnionType
 else:
-  UnionType = typing._UnionGenericAlias  # type: ignore[attr-defined]
+  UnionType = typing.Union  # For runtime checks, get_origin will resolve to typing.Union
 
 if typing.TYPE_CHECKING:
   from mcp import ClientSession as McpClientSession
@@ -466,7 +466,7 @@ def parse_config_for_mcp_usage(
 
 async def parse_config_for_mcp_sessions(
     config: Optional[types.GenerateContentConfigOrDict] = None,
-) -> tuple[
+) -> Tuple[
     Optional[types.GenerateContentConfig],
     Dict[str, McpToGenAiToolAdapter],
 ]:

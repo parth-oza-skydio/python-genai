@@ -21,6 +21,7 @@ import mimetypes
 import os
 import pathlib
 from typing import Any, Dict, Optional, Union
+import sys
 from urllib.parse import urlencode
 from . import _api_module
 from . import _common
@@ -325,6 +326,11 @@ def _DeleteFileResponse_from_mldev(
   return to_object
 
 
+if sys.version_info >= (3, 9):
+    PathLikeType = os.PathLike[str]
+else:
+    PathLikeType = os.PathLike
+
 class Files(_api_module.BaseModule):
 
   def _list(
@@ -596,7 +602,7 @@ class Files(_api_module.BaseModule):
   def upload(
       self,
       *,
-      file: Union[str, pathlib.Path, os.PathLike[str], io.IOBase],
+      file: Union[str, pathlib.Path, PathLikeType, io.IOBase],
       config: Optional[types.UploadFileConfigOrDict] = None,
   ) -> types.File:
     """Calls the API to upload a file using a supported file service.
@@ -1068,7 +1074,7 @@ class AsyncFiles(_api_module.BaseModule):
   async def upload(
       self,
       *,
-      file: Union[str, pathlib.Path, os.PathLike[str], io.IOBase],
+      file: Union[str, pathlib.Path, PathLikeType, io.IOBase],
       config: Optional[types.UploadFileConfigOrDict] = None,
   ) -> types.File:
     """Calls the API to upload a file asynchronously using a supported file service.

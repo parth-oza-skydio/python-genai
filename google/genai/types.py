@@ -38,6 +38,13 @@ else:
 
   _UNION_TYPES = (typing.Union,)
 
+if sys.version_info >= (3, 9):
+    _GenericAlias = builtin_types.GenericAlias
+else:
+    # Placeholder for older Python versions where GenericAlias doesn't exist
+    class _GenericAlias:  # type: ignore
+        pass
+
 _is_pillow_image_imported = False
 if typing.TYPE_CHECKING:
   from ._api_client import BaseApiClient
@@ -2762,7 +2769,7 @@ ToolListUnionDict = List[ToolUnionDict]
 
 if sys.version_info >= (3, 9):
     SchemaUnion = Union[
-        Dict[Any, Any], type, Schema, builtin_types.GenericAlias, Union  # type: ignore[valid-type]
+        Dict[Any, Any], type, Schema, _GenericAlias, Union  # type: ignore[valid-type]
     ]
 else:  # Python 3.8
     SchemaUnion = Union[
@@ -4759,7 +4766,7 @@ class GenerateContentResponse(_common.BaseModel):
     if (
         inspect.isclass(response_schema)
         and not (
-            isinstance(response_schema, builtin_types.GenericAlias)
+            isinstance(response_schema, _GenericAlias)
         )  # Needed for Python 3.9 and 3.10
         and issubclass(response_schema, pydantic.BaseModel)
     ):
@@ -4791,7 +4798,7 @@ class GenerateContentResponse(_common.BaseModel):
           result.parsed = str(response_schema(enum_value).name)  # type: ignore
       except ValueError:
         pass
-    elif isinstance(response_schema, builtin_types.GenericAlias) or isinstance(
+    elif isinstance(response_schema, _GenericAlias) or isinstance(
         response_schema, type
     ):
 

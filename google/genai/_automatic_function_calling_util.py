@@ -17,7 +17,7 @@ import inspect
 import sys
 import types as builtin_types
 import typing
-from typing import _GenericAlias, Any, Callable, get_args, get_origin, Literal, Optional, Union  # type: ignore[attr-defined]
+from typing import _GenericAlias, Any, Callable, get_args, get_origin, List, Literal, Optional, Union  # type: ignore[attr-defined]
 
 import pydantic
 
@@ -29,6 +29,13 @@ if sys.version_info >= (3, 10):
   VersionedUnionType = builtin_types.UnionType
 else:
   VersionedUnionType = typing._UnionGenericAlias  # type: ignore[attr-defined]
+
+if sys.version_info >= (3, 9):
+    _OurPython39GenericAlias = builtin_types.GenericAlias  # This is types.GenericAlias
+else:
+    # Placeholder for Python < 3.9 where types.GenericAlias doesn't exist
+    class _OurPython39GenericAlias: # type: ignore
+        pass
 
 _py_builtin_type_to_schema_type = {
     str: types.Type.STRING,
@@ -56,7 +63,7 @@ def _is_default_value_compatible(
 
   if (
       isinstance(annotation, _GenericAlias)
-      or isinstance(annotation, builtin_types.GenericAlias)
+      or isinstance(annotation, _OurPython39GenericAlias)
       or isinstance(annotation, VersionedUnionType)
   ):
     origin = get_origin(annotation)
@@ -155,7 +162,7 @@ def _parse_schema_from_parameter(
       schema.default = param.default
     return schema
   if isinstance(param.annotation, _GenericAlias) or isinstance(
-      param.annotation, builtin_types.GenericAlias
+      param.annotation, _OurPython39GenericAlias
   ):
     origin = get_origin(param.annotation)
     args = get_args(param.annotation)
@@ -216,10 +223,10 @@ def _parse_schema_from_parameter(
             func_name,
         )
         if (
-            len(param.annotation.__args__) == 2
-            and type(None) in param.annotation.__args__
+            len(get_args(param.annotation)) == 2
+            and type(None) in get_args(param.annotation)
         ):  # Optional type
-          for optional_arg in param.annotation.__args__:
+          for optional_arg in get_args(param.annotation):
             if (
                 hasattr(optional_arg, '__origin__')
                 and optional_arg.__origin__ is list
@@ -275,7 +282,7 @@ def _parse_schema_from_parameter(
   )
 
 
-def _get_required_fields(schema: types.Schema) -> Optional[list[str]]:
+def _get_required_fields(schema: types.Schema) -> Optional[List[str]]:
   if not schema.properties:
     return None
   return [

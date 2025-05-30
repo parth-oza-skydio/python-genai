@@ -20,11 +20,12 @@
 import io
 import pathlib
 import pytest
+from typing import List
 from ... import types
 from .. import pytest_helper
 
 # Upload method is not pydantic.
-test_table: list[pytest_helper.TestTableItem] = []
+test_table: List[pytest_helper.TestTableItem] = []
 pytestmark = pytest_helper.setup(
     file=__file__,
     globals_for_file=globals(),

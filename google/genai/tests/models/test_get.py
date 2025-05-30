@@ -17,6 +17,7 @@
 """Tests for models.get."""
 
 import pytest
+from typing import List
 from ... import errors
 from ... import types
 from .. import pytest_helper
@@ -24,7 +25,7 @@ from .. import pytest_helper
 
 test_http_options = {'api_version': 'v1', 'headers': {'test': 'headers'}}
 
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name='test_get_vertex_tuned_model',
         parameters=types._GetModelParameters(

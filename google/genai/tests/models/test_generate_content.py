@@ -63,7 +63,7 @@ class InstrumentEnum(Enum):
   KEYBOARD = 'Keyboard'
 
 
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name='test_http_options_in_method',
         parameters=types._GenerateContentParameters(

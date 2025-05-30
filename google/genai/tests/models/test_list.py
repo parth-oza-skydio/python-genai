@@ -20,6 +20,7 @@ from unittest import mock
 
 import pytest
 
+from typing import List
 from ... import client as genai_client
 from ... import _api_client
 from ... import types
@@ -27,7 +28,7 @@ from .. import pytest_helper
 
 test_http_options = {'headers': {'test': 'headers'}}
 
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name='test_tuned_models',
         parameters=types._ListModelsParameters(config={'query_base': False}),

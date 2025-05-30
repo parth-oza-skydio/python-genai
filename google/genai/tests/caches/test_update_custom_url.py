@@ -15,6 +15,7 @@
 
 
 import pytest
+from typing import List
 from ... import types
 from .. import pytest_helper
 from . import constants
@@ -35,7 +36,7 @@ _MLDEV_UPDATE_PARAMETERS = types._UpdateCachedContentParameters(
 )
 
 
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         skip_in_api_mode='Update has permission issues in the API mode.',
         name='test_caches_update_with_vertex_cache_name',

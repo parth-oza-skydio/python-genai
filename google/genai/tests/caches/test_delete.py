@@ -15,12 +15,13 @@
 
 
 import pytest
+from typing import List
 from ... import types
 from .. import pytest_helper
 from . import constants
 
 
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         skip_in_api_mode='Delete is not reproducible in the API mode.',
         name='test_caches_delete_with_vertex_cache_name',

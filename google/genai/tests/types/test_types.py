@@ -17,7 +17,11 @@
 import copy
 import sys
 import typing
-from typing import Optional, assert_never
+from typing import Optional
+if sys.version_info >= (3, 11):
+    from typing import assert_never
+else:
+    from typing_extensions import assert_never
 import pydantic
 import pytest
 from ... import types

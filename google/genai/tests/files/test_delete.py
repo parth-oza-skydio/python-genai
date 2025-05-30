@@ -17,10 +17,11 @@
 """Test files delete method."""
 
 import pytest
+from typing import List
 from ... import types
 from .. import pytest_helper
 
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name='test_delete',
         parameters=types._DeleteFileParameters(name='files/1vx8znuf0yje'),

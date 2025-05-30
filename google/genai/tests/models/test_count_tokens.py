@@ -16,6 +16,7 @@
 
 import copy
 import pytest
+from typing import List
 from ... import _transformers as t
 from ... import types
 from .. import pytest_helper
@@ -57,7 +58,7 @@ _COUNT_TOKENS_PARAMS_MLDEV_CUSTOM_URL.config = {
 
 # TODO(b/378952792): MLDev count_tokens needs to merge contents and model
 # param into generateContentRequest field.
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name='test_count_tokens',
         parameters=_COUNT_TOKENS_PARAMS,

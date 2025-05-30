@@ -17,6 +17,7 @@
 """Tests for generate_content_part."""
 
 import base64
+from typing import List
 import os
 
 import PIL.Image
@@ -56,7 +57,7 @@ with open(VIDEO_MP4_FILE_PATH, 'rb') as video_file:
 with open(AUDIO_MP3_FILE_PATH, 'rb') as audio_file:
   audio_bytes = audio_file.read()
 
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name='test_image_uri',
         parameters=types._GenerateContentParameters(

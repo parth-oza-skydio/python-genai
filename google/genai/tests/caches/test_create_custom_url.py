@@ -15,6 +15,7 @@
 
 
 import copy
+from typing import List
 import pytest
 from ... import types
 from .. import pytest_helper
@@ -83,7 +84,7 @@ _CREATE_CACHED_CONTENT_PARAMETERS_GOOGLEAI_FILE = types._CreateCachedContentPara
 # 2. Find the resource name in debugging print and change the resource name constants.py.
 # 3. Run and record get and update tests.
 #   sh run_tests.sh pytest -s tests/caches/test_get.py --mode=api && sh run_tests.sh pytest -s tests/caches/test_update.py --mode=api && sh run_tests.sh pytest -s tests/caches/test_delete.py --mode=api
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name='test_caches_create_with_gcs_uri',
         exception_if_mldev='404',

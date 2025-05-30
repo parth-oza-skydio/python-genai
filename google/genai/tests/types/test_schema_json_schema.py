@@ -16,11 +16,12 @@
 
 
 import pydantic
+from typing import List
 
 from ... import types
 
 
-def _get_not_none_fields(model: pydantic.BaseModel) -> list[str]:
+def _get_not_none_fields(model: pydantic.BaseModel) -> List[str]:
   """Returns field names in a Pydantic model whose values are not None."""
   return [
       field for field, value in model.model_dump().items() if value is not None

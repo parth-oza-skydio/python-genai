@@ -14,10 +14,11 @@
 #
 
 
+from typing import List
 from ... import types as genai_types
 from .. import pytest_helper
 
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name="test_vertexai",
         parameters=genai_types._GetTuningJobParameters(

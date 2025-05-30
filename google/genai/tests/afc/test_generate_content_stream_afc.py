@@ -13,6 +13,7 @@
 # limitations under the License.
 #
 from unittest import mock
+from typing import List
 import pytest
 from ... import _api_client
 from ... import _extra_utils
@@ -134,7 +135,7 @@ def mock_get_function_response_parts_none_async():
 
 
 @pytest.fixture
-def mock_get_function_response_parts() -> list[types.Part]:
+def mock_get_function_response_parts() -> List[types.Part]:
   with mock.patch.object(
       _extra_utils, 'get_function_response_parts'
   ) as mock_get_function_response_parts:
@@ -146,7 +147,7 @@ def mock_get_function_response_parts() -> list[types.Part]:
 
 
 @pytest.fixture
-def mock_get_function_response_parts_async() -> list[types.Part]:
+def mock_get_function_response_parts_async() -> List[types.Part]:
   with mock.patch.object(
       _extra_utils, 'get_function_response_parts_async'
   ) as mock_get_function_response_parts_async:

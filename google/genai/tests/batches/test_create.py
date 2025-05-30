@@ -18,6 +18,7 @@
 
 import pytest
 
+from typing import List
 from ... import types
 from .. import pytest_helper
 
@@ -52,7 +53,7 @@ _EMBEDDING_BQ_OUTPUT_PREFIX = (
 
 
 # All tests will be run for both Vertex and MLDev.
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name='test_generate_content_with_gcs',
         parameters=types._CreateBatchJobParameters(

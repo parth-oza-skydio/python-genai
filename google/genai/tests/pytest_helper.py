@@ -18,7 +18,7 @@ import contextlib
 import json
 import os
 import pathlib
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional, Type
 from pydantic import BaseModel, Field, SerializeAsAny
 import pytest
 from .. import _common
@@ -85,9 +85,9 @@ def create_test_for_table_item(
 
 
 def create_test_for_table(
-    globals_for_file: dict[str, Any],
+    globals_for_file: Dict[str, Any],
     test_method: str,
-    test_table: list[TestTableItem],
+    test_table: List[TestTableItem],
 ):
   for test_table_item in test_table:
     if test_table_item.has_union:
@@ -115,9 +115,9 @@ def create_test_for_table(
 def setup(
     *,
     file: str,
-    globals_for_file: Optional[dict[str, Any]] = None,
+    globals_for_file: Optional[Dict[str, Any]] = None,
     test_method: Optional[str] = None,
-    test_table: Optional[list[TestTableItem]] = None,
+    test_table: Optional[List[TestTableItem]] = None,
     http_options: Optional[HttpOptions] = None,
 ):
   """Generates parameterization for tests, run for both Vertex and MLDev."""
@@ -176,14 +176,14 @@ def setup(
   )
 
 
-def exception_if_mldev(client, exception_type: type[Exception]):
+def exception_if_mldev(client, exception_type: Type[Exception]):
   if client._api_client.vertexai:
     return contextlib.nullcontext()
   else:
     return pytest.raises(exception_type)
 
 
-def exception_if_vertex(client, exception_type: type[Exception]):
+def exception_if_vertex(client, exception_type: Type[Exception]):
   if client._api_client.vertexai:
     return pytest.raises(exception_type)
   else:

@@ -15,6 +15,7 @@
 
 
 """Tests for batches.get()."""
+from typing import List
 
 import pytest
 
@@ -31,7 +32,7 @@ _INVALID_BATCH_JOB_NAME = 'invalid_name'
 
 
 # All tests will be run for both Vertex and MLDev.
-test_table: list[pytest_helper.TestTableItem] = [
+test_table: List[pytest_helper.TestTableItem] = [
     pytest_helper.TestTableItem(
         name='test_get_batch_job',
         parameters=types._GetBatchJobParameters(
